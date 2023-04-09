@@ -19,7 +19,7 @@ exports.Messages = function (req, res) {
   
   // get Messages
   exports.getMessages = function (req, res) {
-    Message.find({}).limit(50)
+    Message.find({})
     .select("user")
     .select("text")
     .select("createdAt")
