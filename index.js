@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const config = require("./config/dev");
 const UserRouter = require("./routers/rouer");
 const cors = require("cors");
+const path = require('path');
 
 const app = express();
 app.use(cors());
@@ -26,9 +27,9 @@ app.use(bodyParser.json());
 
 app.use("/api/v1/user/", UserRouter);
 
-app.get("/", function (req, res) {
-  res.send("I'm Running on the Server.");
-});
+// app.get("/", function (req, res) {
+//   res.send("I'm Running on the Server.");
+// });
 
 app.get("/test", function (req, res) {
   res.send("App is running properly...");
@@ -38,7 +39,7 @@ app.get("/wow", function (req, res) {
   res.send("I like you baby");
 });
 
-app.get("/home", function (req, res) {
+app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
 
