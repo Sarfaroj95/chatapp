@@ -32,7 +32,7 @@ app.get("/test", function (req, res) {
   res.send("App is running properly...");
 });
 app.get("/wow", function (req, res) {
-  res.send("I like u babay");
+  res.send("I like you baby");
 });
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {
