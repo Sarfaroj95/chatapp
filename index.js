@@ -25,9 +25,9 @@ mongoose.connect(config.DB_URL, {
 app.use(bodyParser.json());
 
 app.use("/api/v1/user/", UserRouter);
-app.get("/", function (req, res) {
-  res.send("I'm Running on the Server.");
-});
+// app.get("/", function (req, res) {
+//   res.send("I'm Running on the Server.");
+// });
 app.get("/test", function (req, res) {
   res.send("App is running properly...");
 });
