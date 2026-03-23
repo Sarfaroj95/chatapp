@@ -34,6 +34,9 @@ app.get("/test", function (req, res) {
 app.get("/wow", function (req, res) {
   res.send("I like you baby");
 });
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {
   console.log(`app is running on http://localhost:${PORT}`);
