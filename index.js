@@ -25,18 +25,23 @@ mongoose.connect(config.DB_URL, {
 app.use(bodyParser.json());
 
 app.use("/api/v1/user/", UserRouter);
-// app.get("/", function (req, res) {
-//   res.send("I'm Running on the Server.");
-// });
+
+app.get("/", function (req, res) {
+  res.send("I'm Running on the Server.");
+});
+
 app.get("/test", function (req, res) {
   res.send("App is running properly...");
 });
+
 app.get("/wow", function (req, res) {
   res.send("I like you baby");
 });
-app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, 'index.html'));
+
+app.get("/home", function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {
   console.log(`app is running on http://localhost:${PORT}`);
