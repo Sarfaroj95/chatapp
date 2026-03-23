@@ -9,10 +9,10 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 mongoose.connect(config.DB_URL, {
-    useUnifiedTopology: true, 
+    useUnifiedTopology: true,
     useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: false 
+    useFindAndModify: false
 },
  (err, doc) => {
   if (err) {
@@ -32,7 +32,7 @@ app.get("/test", function (req, res) {
   res.send("App is running properly...");
 });
 app.get("/wow", function (req, res) {
-  res.send("I like u");
+  res.send("I like u babay");
 });
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {
