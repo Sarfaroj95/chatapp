@@ -40,12 +40,33 @@ mainuserSchema.methods.hasSamePasswrod = function (requestedPassword) {
 mainuserSchema.pre('save', function (next) {
   const mainuser = this;
 
-  bcrypt.geneSalt(10, function (err, salt) {
+  // Only hash the password if it has been modified (or is new)
+  if (!mainuser.isModified('password')) return next();
+
+  // Corrected: genSalt (not geneSalt)
+  bcrypt.genSalt(10, function (err, salt) {
+    if (err) return next(err);
+
     bcrypt.hash(mainuser.password, salt, function (err, hash) {
+      if (err) return next(err);
+
       mainuser.password = hash;
       next();
     });
   });
 });
+
+
+// old code
+// mainuserSchema.pre('save', function (next) {
+//   const mainuser = this;
+
+//   bcrypt.geneSalt(10, function (err, salt) {
+//     bcrypt.hash(mainuser.password, salt, function (err, hash) {
+//       mainuser.password = hash;
+//       next();
+//     });
+//   });
+// });
 
 module.exports = mongoose.model("Mainuser", mainuserSchema);

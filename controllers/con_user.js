@@ -27,7 +27,11 @@ exports.Register = function (req, res) {
               .status(422)
               .send({ errors: normalizeErrors(err.errors) });
           } else {
-            return res.json({ register: true });
+           return res.status(200).json({
+              status: 200,
+              statustype: 'register',
+              message: 'successful register'
+            });
           }
         });
       }

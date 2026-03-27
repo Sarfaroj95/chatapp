@@ -1,5 +1,7 @@
 const { normalizeErrors } = require("../helper/mongoose");
 const Chatuser = require("../model/chat_user");
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = "your_secret_key_here";
 
 exports.ChatUserAdd = function (req, res) {
     Chatuser.findOne({ username: req.body.username }, function (err, existingUser) {
@@ -29,26 +31,64 @@ exports.ChatUserAdd = function (req, res) {
 
 // --- Login Chat User ---
 
+// exports.ChatUserLogin = function (req, res) {
+//     const { username, passcode } = req.body;
+
+//     Chatuser.findOne({ username: username, passcode: passcode }, function (err, user) {
+//       if (err) {
+//         console.log(err);
+//         return res.status(422).send({ errors: normalizeErrors(err.errors) });
+//       }
+
+//       if (!user) {
+//         return res.status(422).send({
+//           errors: [
+//             { username: "Invalid User", details: "Please Check Username or Passcode" }
+//           ]
+//         });
+//       }
+//       return res.json({ success: true, "user_id": user._id });
+//     });
+//     // res.json({'success' : true});
+//   };
+
+
+// Move this to a .env file later for security!
+
 exports.ChatUserLogin = function (req, res) {
-    const { username, passcode } = req.body;
-  
-    Chatuser.findOne({ username: username, passcode: passcode }, function (err, user) {
-      if (err) {
-        console.log(err);
-        return res.status(422).send({ errors: normalizeErrors(err.errors) });
-      }
-  
-      if (!user) {
-        return res.status(422).send({
-          errors: [
-            { username: "Invalid User", details: "Please Check Username or Passcode" }
-          ]
-        });
-      }
-      return res.json({ success: true, "user_id": user._id });
+  const { username, passcode } = req.body;
+
+  Chatuser.findOne({ username: username, passcode: passcode }, function (err, user) {
+    if (err) {
+      console.log(err);
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    }
+
+    if (!user) {
+      return res.status(422).send({
+        errors: [
+          { username: "Invalid User", details: "Please Check Username or Passcode" }
+        ]
+      });
+    }
+
+    // --- NEW TOKEN LOGIC START ---
+    // 1. Create the token (payload, secret, options)
+    const token = jwt.sign(
+      { userId: user._id, username: user.username },
+      JWT_SECRET,
+      { expiresIn: '24h' } // Token lasts for 24 hours
+    );
+
+    // 2. Return the token to the client
+    return res.json({
+      success: true,
+      user_id: user._id,
+      token: token  // The client will save this string
     });
-    // res.json({'success' : true});
-  };
+    // --- NEW TOKEN LOGIC END ---
+  });
+};
 
 //  --- Get Chat All User ---
 exports.ChatUserGet = function (req, res) {
@@ -81,7 +121,7 @@ exports.ChatUserUpdate = function (req, res) {
         name: req.body.name,
         username: req.body.username,
         passcode: req.body.passcode
-  
+
       },
       {
         new: true
@@ -98,7 +138,7 @@ exports.ChatUserUpdate = function (req, res) {
   };
 
 
-// --- Remove Chat User --- 
+// --- Remove Chat User ---
 
 exports.RemoveChatUser = function (req, res) {
     Chatuser.findByIdAndRemove({ _id: req.params.id }, function (err) {
@@ -111,4 +151,3 @@ exports.RemoveChatUser = function (req, res) {
       return res.json({ Delete: true });
     });
   };
-  
